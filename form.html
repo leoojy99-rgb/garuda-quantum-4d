@@ -390,13 +390,28 @@
     </div>
 
     <script>
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbycXwQ0l6WLZt9BjV2lwtMVBgi4g5i_UmX0yYNobegIc60Xyqp6l7Q13u4Ux613SiUEfw/exec';
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzvKR8fhIzQn2j5XS-LpA_qR6FB53Ir3zMGEMV4CuQl0ySuRP72eH7mODrqibYQx-eCZw/exec';
         
-        // 从 URL 获取 group 参数
+        // ===== 分组配置：最多支持 20 组 =====
+        const MAX_GROUPS = 20;
+
+        // 从 URL 获取 group 参数，只接受 1 ~ MAX_GROUPS 的整数，否则返回 null
         function getGroupId() {
             const params = new URLSearchParams(window.location.search);
-            return params.get('group') || '1';
+            const raw = (params.get('group') || '').trim();
+            if (!/^\d{1,2}$/.test(raw)) return null;
+            const n = parseInt(raw, 10);
+            return (n >= 1 && n <= MAX_GROUPS) ? String(n) : null;
         }
+
+        // 页面加载时检查链接是否有效，无效则禁用表单（避免数据写错组）
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!getGroupId()) {
+                const btn = document.querySelector('.btn-submit');
+                btn.disabled = true;
+                showMessage('⚠️ Tautan tidak valid. Silakan gunakan tautan resmi yang diberikan oleh admin Anda.', 'error');
+            }
+        });
 
         // 多源 IP 采集，失败时返回空字符串
         async function getClientIP() {
@@ -519,8 +534,15 @@
                 second: '2-digit'
             });
 
-            // 获取 group_id
+            // 获取 group_id（再次校验）
             const groupId = getGroupId();
+            if (!groupId) {
+                showMessage('⚠️ Tautan tidak valid. Silakan gunakan tautan resmi yang diberikan oleh admin Anda.', 'error');
+                submitBtn.disabled = true;
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('btnText').textContent = 'Daftar Sekarang';
+                return;
+            }
 
             // 准备数据（使用完整的 WhatsApp 号码）
             const formData = {
@@ -528,7 +550,8 @@
                 email: email,
                 ip: ip || 'N/A',
                 timestamp: timestamp,
-                group_id: groupId
+                group_id: groupId,
+                user_agent: navigator.userAgent
             };
 
             try {
@@ -537,7 +560,7 @@
                     method: 'POST',
                     mode: 'no-cors',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'text/plain;charset=utf-8'
                     },
                     body: JSON.stringify(formData)
                 });
