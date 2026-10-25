@@ -1,591 +1,387 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>GARUDA QUANTUM 4D - Formulir Pendaftaran</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a472a 0%, #2d5a3d 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px;
-        }
-
-        @media (max-width: 576px) {
-            body {
-                padding: 5px;
-            }
-        }
-
-        .container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            width: 100%;
-            max-width: 600px;
-            overflow: hidden;
-        }
-
-        @media (max-width: 576px) {
-            .container {
-                border-radius: 8px;
-                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-            }
-        }
-
-        .banner {
-            width: 100%;
-            height: 200px;
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        @media (max-width: 768px) {
-            .banner {
-                height: 150px;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .banner {
-                height: 120px;
-            }
-        }
-
-        .content {
-            padding: 40px;
-        }
-
-        @media (max-width: 768px) {
-            .content {
-                padding: 30px;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .content {
-                padding: 20px;
-            }
-        }
-
-        .title {
-            text-align: center;
-            color: #1a472a;
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        @media (max-width: 576px) {
-            .title {
-                font-size: 22px;
-                margin-bottom: 6px;
-            }
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-
-        @media (max-width: 576px) {
-            .subtitle {
-                font-size: 12px;
-                margin-bottom: 15px;
-            }
-        }
-
-        .rewards-section {
-            background: #f5f5f5;
-            border-left: 4px solid #1a472a;
-            padding: 15px;
-            margin-bottom: 25px;
-            border-radius: 4px;
-        }
-
-        @media (max-width: 576px) {
-            .rewards-section {
-                padding: 12px;
-                margin-bottom: 20px;
-            }
-        }
-
-        .rewards-title {
-            color: #1a472a;
-            font-weight: bold;
-            margin-bottom: 12px;
-            font-size: 14px;
-        }
-
-        @media (max-width: 576px) {
-            .rewards-title {
-                font-size: 13px;
-                margin-bottom: 10px;
-            }
-        }
-
-        .reward-item {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 8px;
-            font-size: 13px;
-            color: #333;
-        }
-
-        @media (max-width: 576px) {
-            .reward-item {
-                font-size: 12px;
-                margin-bottom: 6px;
-                line-height: 1.4;
-            }
-        }
-
-        .reward-item::before {
-            content: "☐";
-            margin-right: 10px;
-            color: #1a472a;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
-
-        @media (max-width: 576px) {
-            .reward-item::before {
-                font-size: 12px;
-                margin-right: 8px;
-            }
-        }
-
-        .reward-subtitle {
-            font-style: italic;
-            color: #999;
-            font-size: 12px;
-            margin-top: 8px;
-            text-align: center;
-        }
-
-        @media (max-width: 576px) {
-            .reward-subtitle {
-                font-size: 11px;
-                margin-top: 6px;
-            }
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        @media (max-width: 576px) {
-            .form-group {
-                margin-bottom: 16px;
-            }
-        }
-
-        label {
-            display: block;
-            margin-bottom: 6px;
-            color: #1a472a;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        @media (max-width: 576px) {
-            label {
-                font-size: 13px;
-                margin-bottom: 5px;
-            }
-        }
-
-        input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            transition: border-color 0.3s;
-            height: 48px;
-            box-sizing: border-box;
-        }
-
-        @media (max-width: 576px) {
-            input {
-                padding: 10px 12px;
-                font-size: 16px;
-                height: 44px;
-                border-radius: 4px;
-            }
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #1a472a;
-            box-shadow: 0 0 0 2px rgba(26, 71, 42, 0.1);
-        }
-
-        .hint-text {
-            display: flex;
-            align-items: center;
-            margin-top: 8px;
-            font-size: 12px;
-            color: #999;
-            line-height: 1.4;
-        }
-
-        @media (max-width: 576px) {
-            .hint-text {
-                font-size: 11px;
-                margin-top: 6px;
-            }
-        }
-
-        .hint-text::before {
-            content: "👋";
-            margin-right: 6px;
-            flex-shrink: 0;
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 14px;
-            background: #1a472a;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-top: 20px;
-            height: 48px;
-            box-sizing: border-box;
-        }
-
-        @media (max-width: 576px) {
-            .btn-submit {
-                padding: 12px;
-                font-size: 15px;
-                height: 44px;
-                border-radius: 4px;
-                margin-top: 16px;
-            }
-        }
-
-        .btn-submit:hover {
-            background: #0f2e1d;
-        }
-
-        .btn-submit:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        .btn-submit:active {
-            background: #0a1f13;
-        }
-
-        .message {
-            margin-top: 15px;
-            padding: 12px;
-            border-radius: 6px;
-            text-align: center;
-            font-size: 14px;
-            display: none;
-            line-height: 1.5;
-        }
-
-        @media (max-width: 576px) {
-            .message {
-                margin-top: 12px;
-                padding: 10px;
-                font-size: 13px;
-                border-radius: 4px;
-            }
-        }
-
-        .message.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-            display: block;
-        }
-
-        .message.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-            display: block;
-        }
-
-        .loader {
-            display: none;
-            width: 16px;
-            height: 16px;
-            border: 2px solid #ccc;
-            border-top-color: #1a472a;
-            border-radius: 50%;
-            animation: spin 0.6s linear infinite;
-            margin-right: 8px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<title>GARUDA QUANTUM 4D - Formulir Pendaftaran</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,#1a472a 0%,#2d5a3d 100%);min-height:100vh;display:flex;justify-content:center;align-items:center;padding:10px}
+.container{background:#fff;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.3);width:100%;max-width:600px;overflow:hidden}
+.banner{width:100%;height:200px;background-size:cover;background-position:center}
+.content{padding:40px}
+.title{text-align:center;color:#1a472a;font-size:28px;font-weight:bold;margin-bottom:8px}
+.subtitle{text-align:center;color:#666;font-size:14px;margin-bottom:20px}
+.rewards-section{background:#f5f5f5;border-left:4px solid #1a472a;padding:15px;margin-bottom:25px;border-radius:4px}
+.rewards-title{color:#1a472a;font-weight:bold;margin-bottom:12px;font-size:14px}
+.reward-item{display:flex;align-items:flex-start;margin-bottom:8px;font-size:13px;color:#333;line-height:1.4}
+.reward-subtitle{font-style:italic;color:#999;font-size:12px;margin-top:8px;text-align:center}
+.form-group{margin-bottom:20px}
+label{display:block;margin-bottom:6px;color:#1a472a;font-weight:600;font-size:14px}
+input{width:100%;padding:12px 15px;border:1px solid #ddd;border-radius:6px;font-size:16px;height:48px}
+input:focus{outline:none;border-color:#1a472a;box-shadow:0 0 0 2px rgba(26,71,42,.1)}
+.wa-box{display:flex;align-items:center;border:1px solid #ddd;border-radius:6px;overflow:hidden;height:48px;transition:border-color .3s}
+.wa-box.focus{border-color:#1a472a;box-shadow:0 0 0 2px rgba(26,71,42,.1)}
+.wa-box span{padding:0 15px;background:#f5f5f5;color:#333;font-weight:600;font-size:15px;border-right:1px solid #ddd;height:100%;display:flex;align-items:center}
+.wa-box input{border:none;flex:1;height:100%;box-shadow:none}
+.hint{margin-top:6px;font-size:12px;color:#999;line-height:1.4}
+.preview{margin-top:6px;font-size:13px;color:#1a472a;font-weight:600;min-height:18px}
+.preview.bad{color:#c0392b;font-weight:normal}
+.suggest{margin-top:6px;font-size:13px;color:#8a6d00;display:none}
+.suggest a{color:#1a472a;font-weight:bold;text-decoration:underline;cursor:pointer}
+.remember{display:none;background:#eef6f0;border:1px solid #cfe5d6;border-radius:6px;padding:10px 12px;font-size:13px;color:#1a472a;margin-bottom:16px;align-items:center;justify-content:space-between;gap:10px}
+.remember button{background:none;border:1px solid #1a472a;color:#1a472a;border-radius:4px;padding:5px 10px;font-size:12px;cursor:pointer;white-space:nowrap}
+.btn-submit{width:100%;background:#1a472a;color:#fff;border:none;border-radius:6px;font-size:16px;font-weight:bold;cursor:pointer;margin-top:10px;height:48px;display:flex;align-items:center;justify-content:center}
+.btn-submit:hover{background:#0f2e1d}
+.btn-submit:disabled{background:#ccc;cursor:not-allowed}
+.message{margin-top:15px;padding:12px;border-radius:6px;text-align:center;font-size:14px;display:none;line-height:1.5}
+.message.success{background:#d4edda;color:#155724;border:1px solid #c3e6cb;display:block}
+.message.error{background:#f8d7da;color:#721c24;border:1px solid #f5c6cb;display:block}
+.message.info{background:#fff3cd;color:#856404;border:1px solid #ffeeba;display:block}
+.loader{display:none;width:16px;height:16px;border:2px solid #ccc;border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;margin-right:8px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (max-width:768px){.banner{height:150px}.content{padding:30px}}
+@media (max-width:576px){body{padding:5px}.banner{height:120px}.content{padding:20px}.title{font-size:22px}.subtitle{font-size:12px}.reward-item{font-size:12px}label{font-size:13px}input,.wa-box,.btn-submit{height:44px}}
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="banner" style="background-image: url('https://i.postimg.cc/PfDTrs3Q/ye-mei-(2).png')"></div>
-        
-        <div class="content">
-            <h1 class="title">GARUDA QUANTUM 4D</h1>
-            <p class="subtitle">Check-in Berturut-turut Dapat Hadiah</p>
+<div class="container">
+  <div class="banner" style="background-image:url('https://i.postimg.cc/PfDTrs3Q/ye-mei-(2).png')"></div>
+  <div class="content">
+    <h1 class="title">GARUDA QUANTUM 4D</h1>
+    <p class="subtitle">Check-in Berturut-turut Dapat Hadiah</p>
 
-            <div class="rewards-section">
-                <div class="rewards-title">Lakukan check-in harian untuk mendapatkan hadiah menarik!</div>
-                <div class="reward-item">📅 Hari ke-3: Dapatkan Dokumen Alokasi Aset Terbaik</div>
-                <div class="reward-item">📅 Hari ke-7: Dapatkan Kartu Belanja Rp100.000 - Rp200.000</div>
-                <div class="reward-item">📅 Hari ke-15: Dapatkan Hadiah Fisik Rp180.000 - Rp880.000</div>
-                <div class="reward-item">📅 Hari ke-30: Dapatkan Apple Watch</div>
-                <div class="reward-item">📅 Hari ke-60+: Dapatkan iPhone 18 Pro Max 1TB</div>
-                <div class="reward-subtitle">Semakin lama konsisten check-in, semakin besar hadiah Anda!</div>
-            </div>
-
-            <form id="checkInForm">
-                <div class="form-group">
-                    <label for="whatsapp">Nomor WhatsApp Anda?</label>
-                    <div style="display: flex; align-items: center; border: 1px solid #ddd; border-radius: 6px; overflow: hidden; transition: border-color 0.3s; height: 48px;" id="whatsappContainer">
-                        <span style="padding: 12px 15px; background: #f5f5f5; color: #333; font-weight: 600; font-size: 14px; border-right: 1px solid #ddd; white-space: nowrap; height: 48px; display: flex; align-items: center;">+62</span>
-                        <input type="text" id="whatsapp" placeholder="812567890" maxlength="12" style="border: none; flex: 1; padding: 12px 15px; font-size: 14px; height: 48px;" inputmode="numeric">
-                    </div>
-                    <div class="hint-text">Masukkan nomor telepon Anda (tanpa +62) untuk melakukan check-in secara otomatis.</div>
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email Anda</label>
-                    <input type="email" id="email" placeholder="nama@email.com">
-                </div>
-
-                <button type="submit" class="btn-submit">
-                    <span class="loader" id="loader"></span>
-                    <span id="btnText">Daftar Sekarang</span>
-                </button>
-
-                <div class="message" id="message"></div>
-            </form>
-        </div>
+    <div class="rewards-section">
+      <div class="rewards-title">Lakukan check-in harian untuk mendapatkan hadiah menarik!</div>
+      <div class="reward-item">📅 Hari ke-3: Dapatkan Dokumen Alokasi Aset Terbaik</div>
+      <div class="reward-item">📅 Hari ke-7: Dapatkan Kartu Belanja Rp100.000 - Rp200.000</div>
+      <div class="reward-item">📅 Hari ke-15: Dapatkan Hadiah Fisik Rp180.000 - Rp880.000</div>
+      <div class="reward-item">📅 Hari ke-30: Dapatkan Apple Watch</div>
+      <div class="reward-item">📅 Hari ke-60+: Dapatkan iPhone 18 Pro Max 1TB</div>
+      <div class="reward-subtitle">Semakin lama konsisten check-in, semakin besar hadiah Anda!</div>
     </div>
 
-    <script>
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzvKR8fhIzQn2j5XS-LpA_qR6FB53Ir3zMGEMV4CuQl0ySuRP72eH7mODrqibYQx-eCZw/exec';
-        
-        // ===== 分组配置：最多支持 20 组 =====
-        const MAX_GROUPS = 20;
+    <div class="remember" id="rememberBox">
+      <span>👋 Selamat datang kembali! Data Anda sudah terisi.</span>
+      <button type="button" id="notMeBtn">Bukan saya</button>
+    </div>
 
-        // 从 URL 获取 group 参数，只接受 1 ~ MAX_GROUPS 的整数，否则返回 null
-        function getGroupId() {
-            const params = new URLSearchParams(window.location.search);
-            const raw = (params.get('group') || '').trim();
-            if (!/^\d{1,2}$/.test(raw)) return null;
-            const n = parseInt(raw, 10);
-            return (n >= 1 && n <= MAX_GROUPS) ? String(n) : null;
-        }
+    <form id="checkInForm" novalidate>
+      <div class="form-group">
+        <label for="whatsapp">Nomor WhatsApp Anda</label>
+        <div class="wa-box" id="waBox">
+          <span>+62</span>
+          <input type="tel" id="whatsapp" placeholder="81234567890" inputmode="numeric" autocomplete="tel" maxlength="20">
+        </div>
+        <div class="preview" id="waPreview"></div>
+        <div class="hint">Nomor diawali angka 8 (contoh: 81234567890). Jika Anda mengetik 0812... atau +62812..., sistem akan merapikannya otomatis.</div>
+      </div>
 
-        // 页面加载时检查链接是否有效，无效则禁用表单（避免数据写错组）
-        document.addEventListener('DOMContentLoaded', function() {
-            if (!getGroupId()) {
-                const btn = document.querySelector('.btn-submit');
-                btn.disabled = true;
-                showMessage('⚠️ Tautan tidak valid. Silakan gunakan tautan resmi yang diberikan oleh admin Anda.', 'error');
-            }
-        });
+      <div class="form-group">
+        <label for="email">Email Anda</label>
+        <input type="email" id="email" placeholder="nama@email.com" autocomplete="email" autocapitalize="off" spellcheck="false">
+        <div class="suggest" id="emailSuggest"></div>
+      </div>
 
-        // 多源 IP 采集，失败时返回空字符串
-        async function getClientIP() {
-            const providers = [
-                'https://ipapi.co/json/',
-                'https://api.ipify.org?format=json',
-            ];
+      <button type="submit" class="btn-submit" id="submitBtn">
+        <span class="loader" id="loader"></span><span id="btnText">Check-in Sekarang</span>
+      </button>
+      <div class="message" id="message"></div>
+    </form>
+  </div>
+</div>
 
-            for (const provider of providers) {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 3000);
+<script>
+// ================= 配置 =================
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzvKR8fhIzQn2j5XS-LpA_qR6FB53Ir3zMGEMV4CuQl0ySuRP72eH7mODrqibYQx-eCZw/exec';
+const MAX_GROUPS = 20;
+const PAGE_OPEN_AT = Date.now();
+const $ = id => document.getElementById(id);
 
-                try {
-                    const response = await fetch(provider, { signal: controller.signal });
-                    if (response.ok) {
-                        const data = await response.json();
-                        clearTimeout(timeoutId);
-                        return data.ip || '';
-                    }
-                } catch (error) {
-                    // 继续尝试下一个提供商
-                } finally {
-                    clearTimeout(timeoutId);
-                }
-            }
-            
-            // 所有尝试失败，返回空字符串（不影响表单提交）
-            return '';
-        }
+// ================= 分组校验 =================
+function getGroupId() {
+  const raw = (new URLSearchParams(location.search).get('group') || '').trim();
+  if (!/^\d{1,2}$/.test(raw)) return null;
+  const n = parseInt(raw, 10);
+  return (n >= 1 && n <= MAX_GROUPS) ? String(n) : null;
+}
 
-        // 验证 WhatsApp 号码（仅验证 10-12 位数字，+62 前缀已锁定）
-        function validateWhatsApp(phone) {
-            const cleaned = phone.replace(/\D/g, '');
-            return cleaned.length >= 10 && cleaned.length <= 12;
-        }
+// ================= 号码处理 =================
+// 去掉非数字、开头的 62 和 0，返回 8 开头的本地号码
+function normalizePhone(v) {
+  let d = String(v || '').replace(/\D/g, '');
+  if (d.startsWith('62')) d = d.slice(2);
+  while (d.startsWith('0')) d = d.slice(1);
+  return d;
+}
+function validPhone(d) { return /^8\d{8,12}$/.test(d); }   // 8 开头，共 9–13 位
+function formatPhone(d) {
+  if (d.length <= 3) return '+62 ' + d;
+  if (d.length <= 7) return '+62 ' + d.slice(0,3) + '-' + d.slice(3);
+  return '+62 ' + d.slice(0,3) + '-' + d.slice(3,7) + '-' + d.slice(7);
+}
+function updatePhonePreview() {
+  const d = normalizePhone($('whatsapp').value);
+  const p = $('waPreview');
+  if (!d) { p.textContent = ''; p.className = 'preview'; return; }
+  if (d[0] !== '8') { p.textContent = 'Nomor harus diawali angka 8 setelah +62'; p.className = 'preview bad'; return; }
+  if (d.length < 9) { p.textContent = formatPhone(d) + ' (belum lengkap)'; p.className = 'preview bad'; return; }
+  if (d.length > 13) { p.textContent = 'Nomor terlalu panjang'; p.className = 'preview bad'; return; }
+  p.textContent = '✓ ' + formatPhone(d); p.className = 'preview';
+}
+$('whatsapp').addEventListener('input', function () {
+  this.value = this.value.replace(/[^0-9+\s-]/g, '');
+  updatePhonePreview();
+});
+$('whatsapp').addEventListener('blur', function () {
+  const d = normalizePhone(this.value); if (d) this.value = d;
+  $('waBox').classList.remove('focus'); updatePhonePreview();
+});
+$('whatsapp').addEventListener('focus', () => $('waBox').classList.add('focus'));
 
-        // WhatsApp 输入框事件处理：只允许数字输入
-        document.getElementById('whatsapp').addEventListener('input', function(e) {
-            this.value = this.value.replace(/[^0-9]/g, '');
-        });
+// ================= 邮箱处理 =================
+const COMMON_DOMAINS = ['gmail.com','yahoo.com','yahoo.co.id','hotmail.com','outlook.com','icloud.com','ymail.com','live.com','rocketmail.com','mail.com'];
+function normalizeEmail(v) { return String(v || '').trim().toLowerCase(); }
+function validEmail(e) {
+  if (e.length > 100) return false;
+  if (!/^[a-z0-9._%+-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}$/.test(e)) return false;
+  const [local, domain] = e.split('@');
+  if (local.startsWith('.') || local.endsWith('.') || e.includes('..')) return false;
+  if (domain.split('.').some(p => p.startsWith('-') || p.endsWith('-'))) return false;
+  return true;
+}
+function editDistance(a, b) {
+  const m = a.length, n = b.length, dp = Array.from({length: m + 1}, (_, i) => [i, ...Array(n).fill(0)]);
+  for (let j = 1; j <= n; j++) dp[0][j] = j;
+  for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++)
+    dp[i][j] = Math.min(dp[i-1][j] + 1, dp[i][j-1] + 1, dp[i-1][j-1] + (a[i-1] === b[j-1] ? 0 : 1));
+  return dp[m][n];
+}
+function suggestEmail(e) {
+  const at = e.lastIndexOf('@'); if (at < 1) return null;
+  const domain = e.slice(at + 1); if (!domain || COMMON_DOMAINS.includes(domain)) return null;
+  let best = null, bestD = 3;
+  for (const c of COMMON_DOMAINS) { const d = editDistance(domain, c); if (d < bestD) { bestD = d; best = c; } }
+  return (best && bestD <= 2) ? e.slice(0, at + 1) + best : null;
+}
+function checkEmailSuggest() {
+  const e = normalizeEmail($('email').value), box = $('emailSuggest'), s = suggestEmail(e);
+  if (s) {
+    box.innerHTML = 'Maksud Anda <a id="useSuggest"></a>?';
+    $('useSuggest').textContent = s;
+    $('useSuggest').onclick = () => { $('email').value = s; box.style.display = 'none'; };
+    box.style.display = 'block';
+  } else box.style.display = 'none';
+}
+$('email').addEventListener('blur', function () { this.value = normalizeEmail(this.value); checkEmailSuggest(); });
 
-        // WhatsApp 输入框焦点样式
-        document.getElementById('whatsapp').addEventListener('focus', function() {
-            document.getElementById('whatsappContainer').style.borderColor = '#1a472a';
-            document.getElementById('whatsappContainer').style.boxShadow = '0 0 0 2px rgba(26, 71, 42, 0.1)';
-        });
+// ================= 记住客户信息 =================
+const LS_WA = 'gq_wa', LS_EMAIL = 'gq_email';
+function lsGet(k) { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } }
+function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+function lsDel(k) { try { localStorage.removeItem(k); } catch (e) {} }
+function loadRemembered() {
+  const wa = lsGet(LS_WA), em = lsGet(LS_EMAIL);
+  if (wa || em) {
+    $('whatsapp').value = wa; $('email').value = em;
+    $('rememberBox').style.display = 'flex'; updatePhonePreview();
+  }
+}
+$('notMeBtn').addEventListener('click', () => {
+  lsDel(LS_WA); lsDel(LS_EMAIL);
+  $('whatsapp').value = ''; $('email').value = '';
+  $('rememberBox').style.display = 'none'; $('emailSuggest').style.display = 'none';
+  updatePhonePreview(); hideMessage(); $('whatsapp').focus();
+});
 
-        document.getElementById('whatsapp').addEventListener('blur', function() {
-            document.getElementById('whatsappContainer').style.borderColor = '#ddd';
-            document.getElementById('whatsappContainer').style.boxShadow = 'none';
-        });
+// ================= 设备识别 =================
+function hash(str) {           // cyrb53 简单哈希
+  let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+  for (let i = 0; i < str.length; i++) { const c = str.charCodeAt(i); h1 = Math.imul(h1 ^ c, 2654435761); h2 = Math.imul(h2 ^ c, 1597334677); }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36).toUpperCase();
+}
+function getDeviceId() {        // 每台设备（每个浏览器）一个固定 ID
+  let id = lsGet('gq_did');
+  if (!id) {
+    const m = document.cookie.match(/(?:^|; )gq_did=([^;]+)/);
+    id = m ? m[1] : 'D-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).slice(2, 8).toUpperCase();
+    lsSet('gq_did', id);
+  }
+  document.cookie = 'gq_did=' + id + '; max-age=31536000; path=/; SameSite=Lax';
+  return id;
+}
+function getWebGL() {
+  try {
+    const gl = document.createElement('canvas').getContext('webgl');
+    if (!gl) return '';
+    const ext = gl.getExtension('WEBGL_debug_renderer_info');
+    return ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
+  } catch (e) { return ''; }
+}
+function getCanvasHash() {
+  try {
+    const c = document.createElement('canvas'); c.width = 220; c.height = 40;
+    const x = c.getContext('2d');
+    x.textBaseline = 'top'; x.font = '16px Arial'; x.fillStyle = '#f60'; x.fillRect(0, 0, 100, 20);
+    x.fillStyle = '#069'; x.fillText('GarudaQ4D ✓ 2026', 2, 2);
+    x.fillStyle = 'rgba(102,204,0,0.7)'; x.fillText('GarudaQ4D ✓ 2026', 4, 6);
+    return hash(c.toDataURL());
+  } catch (e) { return ''; }
+}
+async function getModel() {     // 安卓 Chrome 可拿到型号；iPhone/电脑拿不到
+  try {
+    if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
+      const v = await navigator.userAgentData.getHighEntropyValues(['model', 'platform', 'platformVersion']);
+      if (v.model) return v.model;
+      if (v.platform) return v.platform + ' ' + (v.platformVersion || '');
+    }
+  } catch (e) {}
+  const ua = navigator.userAgent;
+  const m = ua.match(/Android [\d.]+; ([^;)]+?)(?: Build|\))/);
+  if (m && m[1] !== 'K') return m[1].trim();
+  if (/iPhone/.test(ua)) return 'iPhone';
+  if (/iPad/.test(ua)) return 'iPad';
+  if (/Windows/.test(ua)) return 'Windows PC';
+  if (/Macintosh/.test(ua)) return 'Mac';
+  if (/Linux/.test(ua)) return 'Linux';
+  return '';
+}
+function collectDevice() {
+  const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone) || '';
+  const webgl = getWebGL();
+  const parts = [
+    navigator.platform, navigator.language, (navigator.languages || []).join(','),
+    screen.width + 'x' + screen.height + 'x' + screen.colorDepth, window.devicePixelRatio,
+    navigator.hardwareConcurrency || '', navigator.deviceMemory || '', navigator.maxTouchPoints || 0,
+    tz, webgl, getCanvasHash()
+  ];
+  const signals = [];
+  const ua = navigator.userAgent;
+  if (navigator.webdriver) signals.push('Otomatisasi');
+  if (/HeadlessChrome|PhantomJS|Puppeteer|Playwright|Selenium/i.test(ua)) signals.push('Browser headless');
+  if (/SwiftShader|llvmpipe|VirtualBox|VMware|Android Emulator|Bluestacks/i.test(webgl)) signals.push('Emulator/VM');
+  if (tz && !/^Asia\/(Jakarta|Pontianak|Makassar|Jayapura)$/.test(tz)) signals.push('Zona waktu luar: ' + tz);
+  if (/Android|iPhone/.test(ua) && !navigator.maxTouchPoints) signals.push('Ponsel tanpa layar sentuh');
+  return {
+    device_id: getDeviceId(),
+    fingerprint: 'F-' + hash(parts.join('|')),
+    timezone: tz,
+    screen: screen.width + 'x' + screen.height,
+    signals: signals
+  };
+}
 
-        // 验证 Email
-        function validateEmail(email) {
-            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-        }
+// ================= IP（失败不影响提交） =================
+async function getIPInfo() {
+  const providers = [
+    { url: 'https://ipapi.co/json/', map: d => ({ ip: d.ip, country: d.country_code }) },
+    { url: 'https://api.ipify.org?format=json', map: d => ({ ip: d.ip, country: '' }) }
+  ];
+  for (const p of providers) {
+    const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 3000);
+    try {
+      const r = await fetch(p.url, { signal: ctl.signal });
+      if (r.ok) { const info = p.map(await r.json()); if (info.ip) return info; }
+    } catch (e) {} finally { clearTimeout(t); }
+  }
+  return { ip: '', country: '' };
+}
 
-        // 显示消息
-        function showMessage(text, type) {
-            const messageEl = document.getElementById('message');
-            messageEl.textContent = text;
-            messageEl.className = `message ${type}`;
-        }
+// ================= 界面辅助 =================
+function showMessage(text, type) { const m = $('message'); m.textContent = text; m.className = 'message ' + type; }
+function hideMessage() { $('message').className = 'message'; }
+function setLoading(on, text) {
+  $('submitBtn').disabled = on;
+  $('loader').style.display = on ? 'inline-block' : 'none';
+  $('btnText').textContent = text || (on ? 'Mengirim...' : 'Check-in Sekarang');
+}
+function jakartaNow() {
+  return new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta', day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }) + ' WIB';
+}
+const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-        // 隐藏消息
-        function hideMessage() {
-            const messageEl = document.getElementById('message');
-            messageEl.className = 'message';
-        }
+// ================= 发送（网络不稳时自动重试 3 次） =================
+async function sendData(payload) {
+  for (let i = 1; i <= 3; i++) {
+    try {
+      await fetch(WEB_APP_URL, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      return true;
+    } catch (e) {
+      if (i < 3) { showMessage('Koneksi lemah, sedang mencoba lagi... (' + i + '/3)', 'info'); await sleep(1500 * i); }
+    }
+  }
+  return false;
+}
 
-        // 表单提交处理
-        document.getElementById('checkInForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+// ================= 初始化 =================
+let submitting = false;
+document.addEventListener('DOMContentLoaded', () => {
+  if (!getGroupId()) {
+    $('submitBtn').disabled = true;
+    showMessage('⚠️ Tautan tidak valid. Silakan gunakan tautan resmi yang diberikan oleh admin Anda.', 'error');
+    return;
+  }
+  loadRemembered();
+});
 
-            const whatsapp = document.getElementById('whatsapp').value.trim();
-            const email = document.getElementById('email').value.trim();
+// ================= 提交 =================
+$('checkInForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (submitting) return;          // 防止连点
 
-            // 客户端验证
-            if (!whatsapp) {
-                showMessage('Mohon masukkan nomor WhatsApp Anda', 'error');
-                return;
-            }
+  const groupId = getGroupId();
+  if (!groupId) { showMessage('⚠️ Tautan tidak valid. Silakan gunakan tautan resmi yang diberikan oleh admin Anda.', 'error'); return; }
 
-            if (!validateWhatsApp(whatsapp)) {
-                showMessage('Nomor WhatsApp tidak valid. Gunakan nomor 10-12 digit (setelah +62)', 'error');
-                return;
-            }
+  const phone = normalizePhone($('whatsapp').value);
+  const email = normalizeEmail($('email').value);
+  $('whatsapp').value = phone; $('email').value = email; updatePhonePreview();
 
-            // 补全完整的 WhatsApp 号码（+62 + 用户输入的数字）
-            const fullWhatsApp = '+62' + whatsapp;
+  if (!phone) return showMessage('Mohon masukkan nomor WhatsApp Anda', 'error');
+  if (phone[0] !== '8') return showMessage('Nomor WhatsApp tidak valid. Nomor harus diawali angka 8 setelah +62 (contoh: 81234567890)', 'error');
+  if (!validPhone(phone)) return showMessage('Nomor WhatsApp tidak valid. Gunakan 9–13 digit setelah +62', 'error');
+  if (!email) return showMessage('Mohon masukkan email Anda', 'error');
+  if (!validEmail(email)) return showMessage('Email tidak valid. Silakan gunakan format yang benar (contoh: nama@email.com)', 'error');
 
-            if (!email) {
-                showMessage('Mohon masukkan email Anda', 'error');
-                return;
-            }
+  submitting = true; setLoading(true); hideMessage();
 
-            if (!validateEmail(email)) {
-                showMessage('Email tidak valid. Silakan gunakan format yang benar (contoh: nama@email.com)', 'error');
-                return;
-            }
+  const [ipInfo, model] = await Promise.all([getIPInfo(), getModel()]);
+  const dev = collectDevice();
 
-            // 禁用提交按钮，显示加载器
-            const submitBtn = document.querySelector('.btn-submit');
-            submitBtn.disabled = true;
-            document.getElementById('loader').style.display = 'inline-block';
-            document.getElementById('btnText').textContent = 'Mengirim...';
-            hideMessage();
+  const payload = {
+    group_id: groupId,
+    whatsapp: '+62' + phone,
+    email: email,
+    ip: ipInfo.ip || 'N/A',
+    country: ipInfo.country || '',
+    device_id: dev.device_id,
+    fingerprint: dev.fingerprint,
+    model: model,
+    timezone: dev.timezone,
+    screen: dev.screen,
+    fill_seconds: Math.round((Date.now() - PAGE_OPEN_AT) / 1000),
+    signals: dev.signals.join('; '),
+    user_agent: navigator.userAgent
+  };
 
-            // 采集 IP 地址（可能失败，不影响提交）
-            const ip = await getClientIP();
-
-            // 获取时间戳
-            const timestamp = new Date().toLocaleString('id-ID', {
-                timeZone: 'Asia/Jakarta',
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            });
-
-            // 获取 group_id（再次校验）
-            const groupId = getGroupId();
-            if (!groupId) {
-                showMessage('⚠️ Tautan tidak valid. Silakan gunakan tautan resmi yang diberikan oleh admin Anda.', 'error');
-                submitBtn.disabled = true;
-                document.getElementById('loader').style.display = 'none';
-                document.getElementById('btnText').textContent = 'Daftar Sekarang';
-                return;
-            }
-
-            // 准备数据（使用完整的 WhatsApp 号码）
-            const formData = {
-                whatsapp: fullWhatsApp,
-                email: email,
-                ip: ip || 'N/A',
-                timestamp: timestamp,
-                group_id: groupId,
-                user_agent: navigator.userAgent
-            };
-
-            try {
-                // 发送数据到 Google Apps Script - 使用 no-cors 模式解决 CORS 问题
-                await fetch(WEB_APP_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'text/plain;charset=utf-8'
-                    },
-                    body: JSON.stringify(formData)
-                });
-
-                // no-cors 模式下，我们无法读取响应，但数据已发出
-                // 直接显示成功消息
-                showMessage('✅ Check-in berhasil! Anda dapat melanjutkan check-in besok untuk mendapatkan hadiah lebih besar.', 'success');
-                document.getElementById('checkInForm').reset();
-                document.getElementById('whatsappContainer').style.borderColor = '#ddd';
-                document.getElementById('whatsappContainer').style.boxShadow = 'none';
-
-            } catch (error) {
-                // 即使网络错误，数据也可能已被发送（异步处理）
-                // 显示友好的错误消息
-                showMessage('⚠️ Terjadi kesalahan saat mengirim data. Silakan coba lagi.', 'error');
-                document.getElementById('whatsappContainer').style.borderColor = '#ddd';
-                document.getElementById('whatsappContainer').style.boxShadow = 'none';
-            } finally {
-                // 恢复提交按钮
-                submitBtn.disabled = false;
-                document.getElementById('loader').style.display = 'none';
-                document.getElementById('btnText').textContent = 'Daftar Sekarang';
-            }
-        });
-    </script>
+  const ok = await sendData(payload);
+  if (ok) {
+    lsSet(LS_WA, phone); lsSet(LS_EMAIL, email);
+    $('rememberBox').style.display = 'flex';
+    showMessage('✅ Check-in berhasil pada ' + jakartaNow() + '. Silakan check-in lagi besok untuk hadiah yang lebih besar!', 'success');
+    setLoading(true, 'Berhasil ✓');
+    setTimeout(() => { setLoading(false); submitting = false; }, 5000);  // 5 秒内不能再点
+  } else {
+    showMessage('⚠️ Koneksi bermasalah. Periksa internet Anda lalu tekan tombol sekali lagi.', 'error');
+    setLoading(false); submitting = false;
+  }
+});
+</script>
 <script>window.parent.postMessage({ action: "ready" }, "*"); 
  
 window.console = new Proxy(console, {
