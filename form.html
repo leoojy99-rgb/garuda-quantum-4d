@@ -8,7 +8,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,#1a472a 0%,#2d5a3d 100%);min-height:100vh;display:flex;justify-content:center;align-items:center;padding:10px}
 .container{background:#fff;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.3);width:100%;max-width:600px;overflow:hidden}
-.banner{width:100%;height:200px;background-size:cover;background-position:center}
+.banner{width:100%;height:200px;background-size:cover;background-position:center;background-color:#f0f0f0}
 .content{padding:40px}
 .title{text-align:center;color:#1a472a;font-size:28px;font-weight:bold;margin-bottom:8px}
 .subtitle{text-align:center;color:#666;font-size:14px;margin-bottom:20px}
@@ -50,7 +50,6 @@ input:focus{outline:none;border-color:#1a472a;box-shadow:0 0 0 2px rgba(26,71,42
   <div class="content">
     <h1 class="title">GARUDA QUANTUM 4D</h1>
     <p class="subtitle">Check-in Berturut-turut Dapat Hadiah</p>
-
     <div class="rewards-section">
       <div class="rewards-title">Lakukan check-in harian untuk mendapatkan hadiah menarik!</div>
       <div class="reward-item">📅 Hari ke-3: Dapatkan Dokumen Alokasi Aset Terbaik</div>
@@ -60,12 +59,10 @@ input:focus{outline:none;border-color:#1a472a;box-shadow:0 0 0 2px rgba(26,71,42
       <div class="reward-item">📅 Hari ke-60+: Dapatkan iPhone 18 Pro Max 1TB</div>
       <div class="reward-subtitle">Semakin lama konsisten check-in, semakin besar hadiah Anda!</div>
     </div>
-
     <div class="remember" id="rememberBox">
       <span>👋 Selamat datang kembali! Data Anda sudah terisi.</span>
       <button type="button" id="notMeBtn">Bukan saya</button>
     </div>
-
     <form id="checkInForm" novalidate>
       <div class="form-group">
         <label for="whatsapp">Nomor WhatsApp Anda</label>
@@ -76,13 +73,11 @@ input:focus{outline:none;border-color:#1a472a;box-shadow:0 0 0 2px rgba(26,71,42
         <div class="preview" id="waPreview"></div>
         <div class="hint">Nomor diawali angka 8 (contoh: 81234567890). Jika Anda mengetik 0812... atau +62812..., sistem akan merapikannya otomatis.</div>
       </div>
-
       <div class="form-group">
         <label for="email">Email Anda</label>
         <input type="email" id="email" placeholder="nama@email.com" autocomplete="email" autocapitalize="off" spellcheck="false">
         <div class="suggest" id="emailSuggest"></div>
       </div>
-
       <button type="submit" class="btn-submit" id="submitBtn">
         <span class="loader" id="loader"></span><span id="btnText">Check-in Sekarang</span>
       </button>
@@ -92,34 +87,36 @@ input:focus{outline:none;border-color:#1a472a;box-shadow:0 0 0 2px rgba(26,71,42
 </div>
 
 <script>
-// ================= 配置 =================
 const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzvKR8fhIzQn2j5XS-LpA_qR6FB53Ir3zMGEMV4CuQl0ySuRP72eH7mODrqibYQx-eCZw/exec';
 const MAX_GROUPS = 20;
 const PAGE_OPEN_AT = Date.now();
+const FETCH_TIMEOUT_MS = 15000;
 const $ = id => document.getElementById(id);
 
-// ================= 分组校验 =================
 function getGroupId() {
   const raw = (new URLSearchParams(location.search).get('group') || '').trim();
   if (!/^\d{1,2}$/.test(raw)) return null;
   const n = parseInt(raw, 10);
-  return (n >= 1 && n <= MAX_GROUPS) ? String(n) : null;
+  return n >= 1 && n <= MAX_GROUPS ? String(n) : null;
 }
 
-// ================= 号码处理 =================
-// 去掉非数字、开头的 62 和 0，返回 8 开头的本地号码
 function normalizePhone(v) {
   let d = String(v || '').replace(/\D/g, '');
   if (d.startsWith('62')) d = d.slice(2);
   while (d.startsWith('0')) d = d.slice(1);
   return d;
 }
-function validPhone(d) { return /^8\d{8,12}$/.test(d); }   // 8 开头，共 9–13 位
+
+function validPhone(d) {
+  return /^8\d{8,12}$/.test(d);
+}
+
 function formatPhone(d) {
   if (d.length <= 3) return '+62 ' + d;
-  if (d.length <= 7) return '+62 ' + d.slice(0,3) + '-' + d.slice(3);
-  return '+62 ' + d.slice(0,3) + '-' + d.slice(3,7) + '-' + d.slice(7);
+  if (d.length <= 7) return '+62 ' + d.slice(0, 3) + '-' + d.slice(3);
+  return '+62 ' + d.slice(0, 3) + '-' + d.slice(3, 7) + '-' + d.slice(7);
 }
+
 function updatePhonePreview() {
   const d = normalizePhone($('whatsapp').value);
   const p = $('waPreview');
@@ -129,19 +126,27 @@ function updatePhonePreview() {
   if (d.length > 13) { p.textContent = 'Nomor terlalu panjang'; p.className = 'preview bad'; return; }
   p.textContent = '✓ ' + formatPhone(d); p.className = 'preview';
 }
-$('whatsapp').addEventListener('input', function () {
+
+$('whatsapp').addEventListener('input', function() {
   this.value = this.value.replace(/[^0-9+\s-]/g, '');
   updatePhonePreview();
 });
-$('whatsapp').addEventListener('blur', function () {
-  const d = normalizePhone(this.value); if (d) this.value = d;
-  $('waBox').classList.remove('focus'); updatePhonePreview();
+
+$('whatsapp').addEventListener('blur', function() {
+  const d = normalizePhone(this.value);
+  if (d) this.value = d;
+  $('waBox').classList.remove('focus');
+  updatePhonePreview();
 });
+
 $('whatsapp').addEventListener('focus', () => $('waBox').classList.add('focus'));
 
-// ================= 邮箱处理 =================
-const COMMON_DOMAINS = ['gmail.com','yahoo.com','yahoo.co.id','hotmail.com','outlook.com','icloud.com','ymail.com','live.com','rocketmail.com','mail.com'];
-function normalizeEmail(v) { return String(v || '').trim().toLowerCase(); }
+const COMMON_DOMAINS = ['gmail.com', 'yahoo.com', 'yahoo.co.id', 'hotmail.com', 'outlook.com', 'icloud.com', 'ymail.com', 'live.com', 'rocketmail.com', 'mail.com'];
+
+function normalizeEmail(v) {
+  return String(v || '').trim().toLowerCase();
+}
+
 function validEmail(e) {
   if (e.length > 100) return false;
   if (!/^[a-z0-9._%+-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}$/.test(e)) return false;
@@ -150,68 +155,109 @@ function validEmail(e) {
   if (domain.split('.').some(p => p.startsWith('-') || p.endsWith('-'))) return false;
   return true;
 }
+
 function editDistance(a, b) {
-  const m = a.length, n = b.length, dp = Array.from({length: m + 1}, (_, i) => [i, ...Array(n).fill(0)]);
+  const m = a.length, n = b.length, dp = Array.from({ length: m + 1 }, (_, i) => [i, ...Array(n).fill(0)]);
   for (let j = 1; j <= n; j++) dp[0][j] = j;
-  for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++)
-    dp[i][j] = Math.min(dp[i-1][j] + 1, dp[i][j-1] + 1, dp[i-1][j-1] + (a[i-1] === b[j-1] ? 0 : 1));
+  for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++) dp[i][j] = Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
   return dp[m][n];
 }
+
 function suggestEmail(e) {
-  const at = e.lastIndexOf('@'); if (at < 1) return null;
-  const domain = e.slice(at + 1); if (!domain || COMMON_DOMAINS.includes(domain)) return null;
+  const at = e.lastIndexOf('@');
+  if (at < 1) return null;
+  const domain = e.slice(at + 1);
+  if (!domain || COMMON_DOMAINS.includes(domain)) return null;
   let best = null, bestD = 3;
-  for (const c of COMMON_DOMAINS) { const d = editDistance(domain, c); if (d < bestD) { bestD = d; best = c; } }
-  return (best && bestD <= 2) ? e.slice(0, at + 1) + best : null;
+  for (const c of COMMON_DOMAINS) {
+    const d = editDistance(domain, c);
+    if (d < bestD) { bestD = d; best = c; }
+  }
+  return best && bestD <= 2 ? e.slice(0, at + 1) + best : null;
 }
+
 function checkEmailSuggest() {
-  const e = normalizeEmail($('email').value), box = $('emailSuggest'), s = suggestEmail(e);
+  const e = normalizeEmail($('email').value);
+  const box = $('emailSuggest');
+  const s = suggestEmail(e);
   if (s) {
     box.innerHTML = 'Maksud Anda <a id="useSuggest"></a>?';
     $('useSuggest').textContent = s;
-    $('useSuggest').onclick = () => { $('email').value = s; box.style.display = 'none'; };
+    $('useSuggest').onclick = () => { $('email').value = s; box.style.display = 'none'; hideMessage(); };
     box.style.display = 'block';
-  } else box.style.display = 'none';
+  } else {
+    box.style.display = 'none';
+  }
 }
-$('email').addEventListener('blur', function () { this.value = normalizeEmail(this.value); checkEmailSuggest(); });
 
-// ================= 记住客户信息 =================
-const LS_WA = 'gq_wa', LS_EMAIL = 'gq_email';
+$('email').addEventListener('blur', function() {
+  this.value = normalizeEmail(this.value);
+  checkEmailSuggest();
+});
+
+$('email').addEventListener('input', function() {
+  if ($('emailSuggest').style.display === 'block') checkEmailSuggest();
+});
+
+const LS_WA = 'gq_wa', LS_EMAIL = 'gq_email', LS_CHECKIN_DATE = 'gq_checkin_date';
+
 function lsGet(k) { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } }
 function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
 function lsDel(k) { try { localStorage.removeItem(k); } catch (e) {} }
+
+function getTodayDateStr() {
+  const formatter = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Jakarta', year: 'numeric', month: '2-digit', day: '2-digit' });
+  return formatter.format(new Date());
+}
+
 function loadRemembered() {
   const wa = lsGet(LS_WA), em = lsGet(LS_EMAIL);
   if (wa || em) {
-    $('whatsapp').value = wa; $('email').value = em;
-    $('rememberBox').style.display = 'flex'; updatePhonePreview();
+    $('whatsapp').value = wa;
+    $('email').value = em;
+    $('rememberBox').style.display = 'flex';
+    updatePhonePreview();
   }
 }
+
 $('notMeBtn').addEventListener('click', () => {
-  lsDel(LS_WA); lsDel(LS_EMAIL);
-  $('whatsapp').value = ''; $('email').value = '';
-  $('rememberBox').style.display = 'none'; $('emailSuggest').style.display = 'none';
-  updatePhonePreview(); hideMessage(); $('whatsapp').focus();
+  lsDel(LS_WA);
+  lsDel(LS_EMAIL);
+  lsDel(LS_CHECKIN_DATE);
+  $('whatsapp').value = '';
+  $('email').value = '';
+  $('rememberBox').style.display = 'none';
+  $('emailSuggest').style.display = 'none';
+  updatePhonePreview();
+  hideMessage();
+  $('whatsapp').focus();
 });
 
-// ================= 设备识别 =================
-function hash(str) {           // cyrb53 简单哈希
+function hash(str) {
   let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
-  for (let i = 0; i < str.length; i++) { const c = str.charCodeAt(i); h1 = Math.imul(h1 ^ c, 2654435761); h2 = Math.imul(h2 ^ c, 1597334677); }
+  for (let i = 0; i < str.length; i++) {
+    const c = str.charCodeAt(i);
+    h1 = Math.imul(h1 ^ c, 2654435761);
+    h2 = Math.imul(h2 ^ c, 1597334677);
+  }
   h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
   h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
   return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36).toUpperCase();
 }
-function getDeviceId() {        // 每台设备（每个浏览器）一个固定 ID
+
+function getDeviceId() {
   let id = lsGet('gq_did');
   if (!id) {
     const m = document.cookie.match(/(?:^|; )gq_did=([^;]+)/);
     id = m ? m[1] : 'D-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).slice(2, 8).toUpperCase();
     lsSet('gq_did', id);
   }
-  document.cookie = 'gq_did=' + id + '; max-age=31536000; path=/; SameSite=Lax';
+  try {
+    document.cookie = 'gq_did=' + id + '; max-age=31536000; path=/; SameSite=Lax';
+  } catch (e) {}
   return id;
 }
+
 function getWebGL() {
   try {
     const gl = document.createElement('canvas').getContext('webgl');
@@ -220,9 +266,11 @@ function getWebGL() {
     return ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
   } catch (e) { return ''; }
 }
+
 function getCanvasHash() {
   try {
-    const c = document.createElement('canvas'); c.width = 220; c.height = 40;
+    const c = document.createElement('canvas');
+    c.width = 220; c.height = 40;
     const x = c.getContext('2d');
     x.textBaseline = 'top'; x.font = '16px Arial'; x.fillStyle = '#f60'; x.fillRect(0, 0, 100, 20);
     x.fillStyle = '#069'; x.fillText('GarudaQ4D ✓ 2026', 2, 2);
@@ -230,7 +278,8 @@ function getCanvasHash() {
     return hash(c.toDataURL());
   } catch (e) { return ''; }
 }
-async function getModel() {     // 安卓 Chrome 可拿到型号；iPhone/电脑拿不到
+
+async function getModel() {
   try {
     if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
       const v = await navigator.userAgentData.getHighEntropyValues(['model', 'platform', 'platformVersion']);
@@ -245,9 +294,11 @@ async function getModel() {     // 安卓 Chrome 可拿到型号；iPhone/电脑
   if (/iPad/.test(ua)) return 'iPad';
   if (/Windows/.test(ua)) return 'Windows PC';
   if (/Macintosh/.test(ua)) return 'Mac';
+  if (/Android/.test(ua)) return 'Android Device';
   if (/Linux/.test(ua)) return 'Linux';
   return '';
 }
+
 function collectDevice() {
   const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone) || '';
   const webgl = getWebGL();
@@ -273,9 +324,10 @@ function collectDevice() {
   };
 }
 
-// ================= IP（失败不影响提交） =================
 async function getIPInfo() {
   const providers = [
+    { url: 'https://api.country.is/', map: d => ({ ip: d.ip, country: d.country }) },
+    { url: 'https://ipwho.is/', map: d => ({ ip: d.ip, country: d.country_code }) },
     { url: 'https://ipapi.co/json/', map: d => ({ ip: d.ip, country: d.country_code }) },
     { url: 'https://api.ipify.org?format=json', map: d => ({ ip: d.ip, country: '' }) }
   ];
@@ -283,46 +335,80 @@ async function getIPInfo() {
     const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 3000);
     try {
       const r = await fetch(p.url, { signal: ctl.signal });
-      if (r.ok) { const info = p.map(await r.json()); if (info.ip) return info; }
+      if (r.ok) {
+        const info = p.map(await r.json());
+        if (info.ip) return info;
+      }
     } catch (e) {} finally { clearTimeout(t); }
   }
   return { ip: '', country: '' };
 }
 
-// ================= 界面辅助 =================
-function showMessage(text, type) { const m = $('message'); m.textContent = text; m.className = 'message ' + type; }
-function hideMessage() { $('message').className = 'message'; }
+function showMessage(text, type) {
+  const m = $('message');
+  m.textContent = text;
+  m.className = 'message ' + type;
+}
+
+function hideMessage() {
+  $('message').className = 'message';
+}
+
 function setLoading(on, text) {
   $('submitBtn').disabled = on;
   $('loader').style.display = on ? 'inline-block' : 'none';
   $('btnText').textContent = text || (on ? 'Mengirim...' : 'Check-in Sekarang');
 }
+
 function jakartaNow() {
   return new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta', day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }) + ' WIB';
 }
+
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-// ================= 发送（网络不稳时自动重试 3 次） =================
+// ================= 发送（跨域兼容 Google Apps Script 标准规范） =================
 async function sendData(payload) {
-  for (let i = 1; i <= 3; i++) {
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
     try {
+      // 必须使用 mode: 'no-cors' 和 text/plain，否则浏览器发送 OPTIONS 预检请求会被 Google 拦截报 CORS 错误
       await fetch(WEB_APP_URL, {
-        method: 'POST', mode: 'no-cors',
+        method: 'POST',
+        mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
+        signal: controller.signal
       });
-      return true;
+      clearTimeout(timeoutId);
+      return { ok: true, message: 'Berhasil' };
     } catch (e) {
-      if (i < 3) { showMessage('Koneksi lemah, sedang mencoba lagi... (' + i + '/3)', 'info'); await sleep(1500 * i); }
+      clearTimeout(timeoutId);
+      if (e.name === 'AbortError') {
+        if (attempt < 3) {
+          showMessage('Koneksi lambat, sedang mencoba lagi... (' + attempt + '/3)', 'info');
+          await sleep(1500 * attempt);
+        } else {
+          return { ok: false, message: 'Koneksi timeout setelah 3 percobaan.' };
+        }
+      } else {
+        if (attempt < 3) {
+          showMessage('Koneksi bermasalah, sedang mencoba lagi... (' + attempt + '/3)', 'info');
+          await sleep(1500 * attempt);
+        } else {
+          return { ok: false, message: 'Koneksi bermasalah: ' + e.message };
+        }
+      }
     }
   }
-  return false;
+  return { ok: false, message: 'Gagal mengirim data.' };
 }
 
-// ================= 初始化 =================
 let submitting = false;
+
 document.addEventListener('DOMContentLoaded', () => {
-  if (!getGroupId()) {
+  const groupId = getGroupId();
+  if (!groupId) {
     $('submitBtn').disabled = true;
     showMessage('⚠️ Tautan tidak valid. Silakan gunakan tautan resmi yang diberikan oleh admin Anda.', 'error');
     return;
@@ -330,17 +416,21 @@ document.addEventListener('DOMContentLoaded', () => {
   loadRemembered();
 });
 
-// ================= 提交 =================
 $('checkInForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-  if (submitting) return;          // 防止连点
+  if (submitting) return;
 
   const groupId = getGroupId();
-  if (!groupId) { showMessage('⚠️ Tautan tidak valid. Silakan gunakan tautan resmi yang diberikan oleh admin Anda.', 'error'); return; }
+  if (!groupId) {
+    showMessage('⚠️ Tautan tidak valid. Silakan gunakan tautan resmi yang diberikan oleh admin Anda.', 'error');
+    return;
+  }
 
   const phone = normalizePhone($('whatsapp').value);
   const email = normalizeEmail($('email').value);
-  $('whatsapp').value = phone; $('email').value = email; updatePhonePreview();
+  $('whatsapp').value = phone;
+  $('email').value = email;
+  updatePhonePreview();
 
   if (!phone) return showMessage('Mohon masukkan nomor WhatsApp Anda', 'error');
   if (phone[0] !== '8') return showMessage('Nomor WhatsApp tidak valid. Nomor harus diawali angka 8 setelah +62 (contoh: 81234567890)', 'error');
@@ -348,10 +438,13 @@ $('checkInForm').addEventListener('submit', async (e) => {
   if (!email) return showMessage('Mohon masukkan email Anda', 'error');
   if (!validEmail(email)) return showMessage('Email tidak valid. Silakan gunakan format yang benar (contoh: nama@email.com)', 'error');
 
-  submitting = true; setLoading(true); hideMessage();
+  submitting = true;
+  setLoading(true);
+  hideMessage();
 
   const [ipInfo, model] = await Promise.all([getIPInfo(), getModel()]);
   const dev = collectDevice();
+  const clientTimeMs = Date.now();
 
   const payload = {
     group_id: groupId,
@@ -364,47 +457,30 @@ $('checkInForm').addEventListener('submit', async (e) => {
     model: model,
     timezone: dev.timezone,
     screen: dev.screen,
-    fill_seconds: Math.round((Date.now() - PAGE_OPEN_AT) / 1000),
+    fill_seconds: Math.round((clientTimeMs - PAGE_OPEN_AT) / 1000),
+    client_time_ms: clientTimeMs,
     signals: dev.signals.join('; '),
     user_agent: navigator.userAgent
   };
 
-  const ok = await sendData(payload);
-  if (ok) {
-    lsSet(LS_WA, phone); lsSet(LS_EMAIL, email);
+  const result = await sendData(payload);
+  if (result.ok) {
+    lsSet(LS_WA, phone);
+    lsSet(LS_EMAIL, email);
+    lsSet(LS_CHECKIN_DATE, getTodayDateStr());
     $('rememberBox').style.display = 'flex';
     showMessage('✅ Check-in berhasil pada ' + jakartaNow() + '. Silakan check-in lagi besok untuk hadiah yang lebih besar!', 'success');
     setLoading(true, 'Berhasil ✓');
-    setTimeout(() => { setLoading(false); submitting = false; }, 5000);  // 5 秒内不能再点
+    setTimeout(() => {
+      setLoading(false);
+      submitting = false;
+    }, 5000);
   } else {
-    showMessage('⚠️ Koneksi bermasalah. Periksa internet Anda lalu tekan tombol sekali lagi.', 'error');
-    setLoading(false); submitting = false;
+    setLoading(false);
+    showMessage('⚠️ ' + result.message + ' Periksa internet Anda lalu tekan tombol sekali lagi.', 'error');
+    submitting = false;
   }
 });
 </script>
-<script>window.parent.postMessage({ action: "ready" }, "*"); 
- 
-window.console = new Proxy(console, {
-  get(target, prop) {
-    if (['log', 'warn', 'error'].includes(prop)) {
-      return new Proxy(target[prop], {
-        apply(fn, thisArg, args) {
-          fn.apply(thisArg, args);
-          window.parent.postMessage({ action: 'console', 
-            type: prop, 
-            args: args.map((arg) => {
-              try {
-                return JSON.stringify(arg).replace(/^["']|["']$/g, '');
-              } catch (e) {
-                return arg;
-              }
-            }) 
-          }, '*');
-        }
-      });
-    }
-    return target[prop];
-  }
-});
-</script></body>
+</body>
 </html>
