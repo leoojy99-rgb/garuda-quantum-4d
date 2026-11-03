@@ -95,10 +95,11 @@ input:focus{outline:none;border-color:#1a472a;box-shadow:0 0 0 2px rgba(26,71,42
 // ================= Konfigurasi =================
 // 后端部署地址（Apps Script /exec）。更换部署后只需改这一行。
 const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzvKR8fhIzQn2j5XS-LpA_qR6FB53Ir3zMGEMV4CuQl0ySuRP72eH7mODrqibYQx-eCZw/exec';
-const MAX_GROUPS = 14;          // 必须与后端 CFG.GROUP_COUNT 保持一致
 const PAGE_OPEN_AT = Date.now();
 const SEND_TIMEOUT_MS = 15000;  // 超时后停止转圈，提示重试
 const $ = id => document.getElementById(id);
+
+const MAX_GROUPS = 14;          // 必须与后端 CFG.GROUP_COUNT 保持一致
 
 // ================= Validasi grup =================
 function getGroupId() {
@@ -271,9 +272,13 @@ async function getModel() {
 function collectDevice() {
   const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone) || '';
   const webgl = getWebGL();
+  // 横竖屏归一：Android 旋转后 screen.width/height 会互换，
+  // 不归一的话同一台手机会算出两个指纹（等于凭空多出一台设备）。
+  const sw = Math.min(screen.width, screen.height);
+  const sh = Math.max(screen.width, screen.height);
   const parts = [
     navigator.platform, navigator.language, (navigator.languages || []).join(','),
-    screen.width + 'x' + screen.height + 'x' + screen.colorDepth, window.devicePixelRatio,
+    sw + 'x' + sh + 'x' + screen.colorDepth, window.devicePixelRatio,
     navigator.hardwareConcurrency || '', navigator.deviceMemory || '', navigator.maxTouchPoints || 0,
     tz, webgl, getCanvasHash()
   ];
@@ -324,7 +329,6 @@ function jakartaNow() {
   });
   return s.replace(/\./g, ':') + ' WIB';
 }
-
 // ================= Pengiriman (JSONP) =================
 /**
  * Mengirim data lewat JSONP, sehingga hasil dari server BENAR-BENAR bisa dibaca.
@@ -366,7 +370,7 @@ function sendData(payload) {
 // ================= Inisialisasi =================
 let submitting = false;
 document.addEventListener('DOMContentLoaded', function () {
-  if (!getGroupId()) {
+if (!getGroupId()) {
     $('submitBtn').disabled = true;
     showMessage('⚠️ Tautan tidak valid. Silakan gunakan tautan resmi yang diberikan oleh admin Anda.', 'error');
     return;
