@@ -422,7 +422,7 @@ $('checkInForm').addEventListener('submit', async function (e) {
       group_id: groupId,
       whatsapp: '+62' + phone,
       email: email,
-      ip: ipInfo.ip || 'N/A',
+      ip: ipInfo.ip || '',          // 取不到就留空，不要写 N/A（否则会被当成同一个网络）
       country: ipInfo.country || '',
       device_id: dev.device_id,
       fingerprint: dev.fingerprint,
