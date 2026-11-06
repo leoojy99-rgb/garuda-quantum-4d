@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
 <title>GARUDA QUANTUM 4D - Formulir Pendaftaran</title>
+<link rel="icon" href="data:,">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,#1a472a 0%,#2d5a3d 100%);min-height:100vh;display:flex;justify-content:center;align-items:center;padding:10px}
@@ -342,21 +343,22 @@ function sendData(payload) {
     const script = document.createElement('script');
     let done = false;
 
-    function finish(ok) {
+    function finish(res) {
       if (done) return;
       done = true;
       clearTimeout(timer);
       try { delete window[cb]; } catch (e) { window[cb] = undefined; }
       if (script.parentNode) script.parentNode.removeChild(script);
-      resolve(ok);
+      resolve(res);
     }
 
-    const timer = setTimeout(() => finish(false), SEND_TIMEOUT_MS);
+    const timer = setTimeout(() => finish(null), SEND_TIMEOUT_MS);
 
     window[cb] = function (res) {
-      finish(!!(res && res.status === 'success'));
+      // 原样返回响应：成功/失败都要能拿到 message
+      finish(res || null);
     };
-    script.onerror = function () { finish(false); };
+    script.onerror = function () { finish(null); };
 
     const url = WEB_APP_URL +
       '?cb=' + encodeURIComponent(cb) +
@@ -435,27 +437,56 @@ $('checkInForm').addEventListener('submit', async function (e) {
 
     ok = await sendData(payload);
   } catch (err) {
-    ok = false;
+    ok = null;
   } finally {
     clearTimeout(slowTimer);
   }
 
-  if (ok) {
+  if (ok && ok.status === 'success') {
     lsSet(LS_WA, phone);
     lsSet(LS_EMAIL, email);
     $('rememberBox').style.display = 'flex';
-    showMessage('✅ Check-in berhasil pada ' + jakartaNow() + '. Silakan check-in lagi besok untuk mendapatkan hadiah yang lebih besar!', 'success');
+    // 后端命中「24 小时内同设备已签到」时会带 message，用它替换默认文案
+    var okMsg = (ok && ok.message)
+      ? ok.message
+      : '✅ Check-in berhasil pada ' + jakartaNow() + '. Silakan check-in lagi besok untuk mendapatkan hadiah yang lebih besar!';
+    showMessage(okMsg, 'success');
     setLoading(true, 'Berhasil');
     setTimeout(function () {
       setLoading(false);
       submitting = false;
     }, 5000);
   } else {
-    showMessage('⚠️ Koneksi bermasalah. Periksa koneksi internet Anda, lalu tekan tombol sekali lagi.', 'error');
+    // 后端可能返回统一提示（例如繁忙），有就用它，没有才用通用网络错误文案
+    var errMsg = (ok && ok.message)
+      ? ok.message
+      : '⚠️ Koneksi bermasalah. Periksa koneksi internet Anda, lalu tekan tombol sekali lagi.';
+    showMessage(errMsg, 'error');
     setLoading(false);
     submitting = false;
   }
 });
+
+// ================= 调试面板（链接加 ?debug=1 才显示）=================
+// 用途：查自己的 Device ID / 指纹，核对表格里的测试记录是否本机
+(function () {
+  if (new URLSearchParams(location.search).get('debug') !== '1') return;
+  try {
+    const d = collectDevice();
+    const box = document.createElement('div');
+    box.style.cssText = 'position:fixed;left:8px;bottom:8px;right:8px;z-index:9999;' +
+      'background:#111;color:#0f0;font:12px/1.7 monospace;padding:10px 12px;' +
+      'border-radius:6px;word-break:break-all;white-space:pre-wrap;box-shadow:0 2px 10px rgba(0,0,0,.4)';
+    box.textContent = 'DEVICE ID  : ' + d.device_id +
+      '\nFINGERPRINT: ' + d.fingerprint +
+      '\nTIMEZONE   : ' + d.timezone +
+      '\nSCREEN     : ' + d.screen +
+      '\nSIGNALS    : ' + (d.signals || '(无)');
+    document.body.appendChild(box);
+  } catch (e) {
+    console.log('调试面板出错：' + e.message);
+  }
+})();
 </script>
 </body>
 </html>
